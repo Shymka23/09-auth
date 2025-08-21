@@ -1,102 +1,74 @@
-import axios from "axios";
-import { FormValues, Note, NotesResponse } from "@/types/note";
+// Re-export functions from clientApi for backward compatibility
+export {
+  loginUser,
+  registerUser,
+  logoutUser,
+  checkSession,
+  getCurrentUser,
+  updateUser,
+} from "./api/clientApi";
 
-const API_BASE_URL = "https://notehub-public.goit.study/api/notes";
+// Note-related API functions
+export const fetchNotes = async (search = "", page = 1, tag = "") => {
+  const params = new URLSearchParams();
+  if (search) params.append("search", search);
+  if (page) params.append("page", page.toString());
+  if (tag) params.append("tag", tag);
+  params.append("perPage", "12");
 
-const getAuthHeaders = () => {
-  const token = process.env.NEXT_PUBLIC_NOTEHUB_TOKEN;
-  if (!token) {
-    throw new Error("API token is not configured");
-  }
-  return {
-    Authorization: `Bearer ${token}`,
-  };
+  const response = await fetch(`/api/notes?${params.toString()}`);
+  if (!response.ok) throw new Error("Failed to fetch notes");
+  const data = await response.json();
+  // API повертає { notes: Note[], totalPages: number }
+  return data;
 };
 
-export const fetchNotes = async (
-  search: string,
-  page: number,
-  tag?: string
-): Promise<NotesResponse> => {
-  try {
-    const params = {
-      ...(search && { search }),
-      ...(tag && tag !== "All" && { tag }),
-      page,
-      perPage: 12,
-    };
+export const fetchNoteById = async (id: string) => {
+  const response = await fetch(`/api/notes/${id}`);
+  if (!response.ok) throw new Error("Failed to fetch note");
+  return response.json();
+};
 
-    const response = await axios.get<NotesResponse>(API_BASE_URL, {
-      params,
-      headers: getAuthHeaders(),
-    });
+export const createNote = async (note: {
+  title: string;
+  content: string;
+  tag: string;
+}) => {
+  const response = await fetch("/api/notes", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(note),
+  });
+  if (!response.ok) throw new Error("Failed to create note");
+  return response.json();
+};
 
-    return response.data;
-  } catch (error) {
-    if (axios.isAxiosError(error)) {
-      if (error.response?.status === 401) {
-        throw new Error("Invalid token - please check your API configuration");
-      }
-      throw new Error(
-        `Failed to fetch notes: ${error.response?.data?.message || error.message}`
-      );
+export const deleteNote = async (id: string) => {
+  const response = await fetch(`/api/notes/${id}`, {
+    method: "DELETE",
+  });
+  if (!response.ok) throw new Error("Failed to delete note");
+  return response.json();
+};
+
+// Tags API function
+export const getAllTags = async () => {
+  const response = await fetch("/api/notes");
+  if (!response.ok) {
+    if (response.status === 401) {
+      // Return empty array for unauthorized users
+      return [];
     }
-    throw new Error("An unexpected error occurred while fetching notes");
+    throw new Error("Failed to fetch tags");
   }
-};
+  const data = await response.json();
+  // API повертає { notes: Note[], totalPages: number }
+  const notes = data.notes || [];
+  const tags = new Set(
+    notes.map((note: { tag?: string }) => note.tag).filter(Boolean)
+  );
 
-export const createNote = async (note: FormValues): Promise<Note> => {
-  try {
-    const response = await axios.post<Note>(API_BASE_URL, note, {
-      headers: {
-        ...getAuthHeaders(),
-        "Content-Type": "application/json",
-      },
-    });
-
-    return response.data;
-  } catch (error) {
-    if (axios.isAxiosError(error)) {
-      throw new Error(
-        `Failed to create note: ${error.response?.data?.message || error.message}`
-      );
-    }
-    throw new Error("An unexpected error occurred while creating note");
-  }
-};
-
-export const deleteNote = async (id: string): Promise<Note> => {
-  try {
-    const response = await axios.delete<Note>(`${API_BASE_URL}/${id}`, {
-      headers: getAuthHeaders(),
-    });
-    return response.data;
-  } catch (error) {
-    if (axios.isAxiosError(error)) {
-      throw new Error(
-        `Failed to delete note: ${error.response?.data?.message || error.message}`
-      );
-    }
-    throw new Error("An unexpected error occurred while deleting note");
-  }
-};
-
-export const fetchNoteById = async (id: string): Promise<Note> => {
-  try {
-    const response = await axios.get<Note>(`${API_BASE_URL}/${id}`, {
-      headers: getAuthHeaders(),
-    });
-    return response.data;
-  } catch (error) {
-    if (axios.isAxiosError(error)) {
-      throw new Error(
-        `Failed to fetch note details: ${error.response?.data?.message || error.message}`
-      );
-    }
-    throw new Error("An unexpected error occurred while fetching note details");
-  }
-};
-
-export const getAllTags = (): string[] => {
-  return ["All", "Todo", "Work", "Personal", "Meeting", "Shopping"];
+  // Додаємо "All" на початок списку
+  const tagsArray = Array.from(tags);
+  return ["All", ...tagsArray];
 };

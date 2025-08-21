@@ -19,8 +19,3 @@ export interface NotesResponse {
   notes: Note[];
   totalPages: number;
 }
-
-export interface ApiError {
-  message: string;
-  status?: number;
-}

@@ -4,14 +4,59 @@ import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { getAllTags } from "@/lib/api";
+import { useAuthStore } from "@/lib/store/authStore";
+import { useLanguage } from "@/lib/context/LanguageContext";
 import css from "./TagsMenu.module.css";
 
 export default function TagsMenu() {
   const [isOpen, setIsOpen] = useState(false);
+  const [tags, setTags] = useState<string[]>([]);
+  const [loading, setLoading] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
   const params = useParams();
   const currentTag = params.slug?.[0] || "";
-  const tags = getAllTags();
+  const { isAuthenticated } = useAuthStore();
+  const { t } = useLanguage();
+
+  const getTagTranslation = (tag: string) => {
+    switch (tag) {
+      case "All":
+        return t("notes.allNotes");
+      case "Todo":
+        return t("tags.todo");
+      case "Personal":
+        return t("tags.personal");
+      case "Meeting":
+        return t("tags.meeting");
+      case "Work":
+        return t("tags.work");
+      case "Shopping":
+        return t("tags.shopping");
+      default:
+        return tag;
+    }
+  };
+
+  useEffect(() => {
+    const fetchTags = async () => {
+      if (!isAuthenticated) {
+        setLoading(false);
+        return;
+      }
+
+      setLoading(true);
+      try {
+        const fetchedTags = await getAllTags();
+        setTags(fetchedTags as string[]);
+      } catch (error) {
+        console.error("Failed to fetch tags:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchTags();
+  }, [isAuthenticated]);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -31,7 +76,7 @@ export default function TagsMenu() {
       <button className={css.menuButton} onClick={() => setIsOpen(!isOpen)}>
         Notes {isOpen ? "▴" : "▾"}
       </button>
-      {isOpen && (
+      {isOpen && !loading && isAuthenticated && (
         <ul className={css.menuList}>
           {tags.map((tag) => (
             <li key={tag} className={css.menuItem}>
@@ -40,10 +85,23 @@ export default function TagsMenu() {
                 className={`${css.menuLink} ${currentTag === tag ? css.active : ""}`}
                 onClick={() => setIsOpen(false)}
               >
-                {tag === "All" ? "All notes" : tag}
+                {getTagTranslation(tag)}
               </Link>
             </li>
           ))}
+        </ul>
+      )}
+      {isOpen && !isAuthenticated && (
+        <ul className={css.menuList}>
+          <li className={css.menuItem}>
+            <Link
+              href="/sign-in"
+              className={css.menuLink}
+              onClick={() => setIsOpen(false)}
+            >
+              Please sign in to view notes
+            </Link>
+          </li>
         </ul>
       )}
     </div>

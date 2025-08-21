@@ -8,6 +8,7 @@ import css from "./NoteForm.module.css";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import { useNoteStore, initialDraft } from "@/lib/store/noteStore";
+import { useLanguage } from "@/lib/context/LanguageContext";
 
 interface NoteFormProps {
   onCancel?: () => void;
@@ -18,6 +19,24 @@ export function NoteForm({ onCancel }: NoteFormProps) {
   const router = useRouter();
   const queryClient = useQueryClient();
   const [isPending, startTransition] = useTransition();
+  const { t } = useLanguage();
+
+  const getTagTranslation = (tag: string) => {
+    switch (tag) {
+      case "Todo":
+        return t("tags.todo");
+      case "Personal":
+        return t("tags.personal");
+      case "Meeting":
+        return t("tags.meeting");
+      case "Work":
+        return t("tags.work");
+      case "Shopping":
+        return t("tags.shopping");
+      default:
+        return tag;
+    }
+  };
 
   const { draft, setDraft, clearDraft } = useNoteStore((s) => ({
     draft: s.draft,
@@ -106,11 +125,11 @@ export function NoteForm({ onCancel }: NoteFormProps) {
           onChange={handleChange}
           required
         >
-          <option value="Todo">Todo</option>
-          <option value="Work">Work</option>
-          <option value="Personal">Personal</option>
-          <option value="Meeting">Meeting</option>
-          <option value="Shopping">Shopping</option>
+          <option value="Todo">{getTagTranslation("Todo")}</option>
+          <option value="Work">{getTagTranslation("Work")}</option>
+          <option value="Personal">{getTagTranslation("Personal")}</option>
+          <option value="Meeting">{getTagTranslation("Meeting")}</option>
+          <option value="Shopping">{getTagTranslation("Shopping")}</option>
         </select>
       </div>
 

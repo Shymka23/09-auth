@@ -5,6 +5,7 @@ import toast from "react-hot-toast";
 import { Note } from "@/types/note";
 import { deleteNote } from "@/lib/api";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useLanguage } from "@/lib/context/LanguageContext";
 
 interface NoteListProps {
   notes: Note[];
@@ -12,6 +13,24 @@ interface NoteListProps {
 
 export default function NoteList({ notes }: NoteListProps) {
   const queryClient = useQueryClient();
+  const { t } = useLanguage();
+
+  const getTagTranslation = (tag: string) => {
+    switch (tag) {
+      case "Todo":
+        return t("tags.todo");
+      case "Personal":
+        return t("tags.personal");
+      case "Meeting":
+        return t("tags.meeting");
+      case "Work":
+        return t("tags.work");
+      case "Shopping":
+        return t("tags.shopping");
+      default:
+        return tag;
+    }
+  };
 
   const mutation = useMutation({
     mutationFn: deleteNote,
@@ -54,7 +73,7 @@ export default function NoteList({ notes }: NoteListProps) {
           </div>
           <p className={css.content}>{note.content}</p>
           <div className={css.footer}>
-            <span className={css.tag}>{note.tag}</span>
+            <span className={css.tag}>{getTagTranslation(note.tag)}</span>
             <div className={css.actions}>
               <Link
                 href={`/notes/${note.id}`}

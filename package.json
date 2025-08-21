@@ -13,16 +13,18 @@
   "dependencies": {
     "@tanstack/react-query": "^5.84.1",
     "axios": "^1.11.0",
-    "zustand": "^4.5.2",
+    "cookie": "^1.0.2",
     "next": "15.4.4",
     "react": "19.1.0",
     "react-dom": "19.1.0",
     "react-hot-toast": "^2.5.2",
     "react-paginate": "^8.3.0",
-    "use-debounce": "^10.0.5"
+    "use-debounce": "^10.0.5",
+    "zustand": "^4.5.2"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
+    "@types/cookie": "^0.6.0",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",

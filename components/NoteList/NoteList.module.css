@@ -101,7 +101,6 @@
 .viewButton:active {
   transform: translateY(1px);
 }
-
 .deleteButton {
   padding: 8px 12px;
   font-size: 14px;

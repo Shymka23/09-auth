@@ -1,0 +1,70 @@
+.navigationItem {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.navigationLink {
+  color: #333;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.2s ease;
+}
+
+.navigationLink:hover {
+  color: #007bff;
+}
+
+.userEmail {
+  margin: 0;
+  font-size: 0.9rem;
+  color: #666;
+}
+
+.logoutButton {
+  background: none;
+  border: 1px solid #dc3545;
+  color: #dc3545;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: all 0.2s ease;
+}
+
+.logoutButton:hover {
+  background-color: #dc3545;
+  color: white;
+}
+
+.userActions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.clearAvatarButton {
+  background: none;
+  border: 1px solid #ffc107;
+  color: #ffc107;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.8rem;
+  transition: all 0.2s ease;
+  min-width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.clearAvatarButton:hover:not(:disabled) {
+  background-color: #ffc107;
+  color: #333;
+}
+
+.clearAvatarButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}

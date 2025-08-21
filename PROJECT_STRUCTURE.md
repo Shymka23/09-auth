@@ -15,14 +15,14 @@ app/
 │       ├── page.tsx
 │       └── SignUp.module.css
 ├── (private routes)/                 ✅ EXISTS
-│   ├── layout.tsx
-│   ├── @modal/                       ✅ EXISTS
-│   │   ├── default.tsx
-│   │   └── (.)notes/                 ✅ EXISTS
-│   │       └── [id]/                 ✅ EXISTS
-│   │           ├── page.tsx
-│   │           ├── NotePreview.client.tsx
-│   │           └── NotePreview.module.css
+│   └── layout.tsx
+├── @modal/                           ✅ EXISTS
+│   ├── default.tsx
+│   └── (.)notes/                     ✅ EXISTS
+│       └── [id]/                     ✅ EXISTS
+│           ├── page.tsx
+│           ├── NotePreview.client.tsx
+│           └── NotePreview.module.css
 │   ├── notes/                        ✅ EXISTS
 │   │   ├── [id]/                     ✅ EXISTS
 │   │   │   ├── page.tsx
@@ -113,7 +113,7 @@ All required directories and files exist in the repository:
 ✅ **app/(private routes)/notes/filter/[...slug]/** - Dynamic filter routes  
 ✅ **app/(private routes)/profile/** - User profile  
 ✅ **app/(private routes)/profile/edit/** - Edit profile  
-✅ **app/@modal/** - Modal components (inside private routes)  
+✅ **app/@modal/** - Modal components  
 ✅ **app/@modal/(.)notes/[id]/** - Note preview modal
 
 ## Build Status

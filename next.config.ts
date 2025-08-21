@@ -31,6 +31,16 @@ const nextConfig: NextConfig = {
   experimental: {
     // Дозволяє використовувати динамічні імпорти
     esmExternals: true,
+    // Оптимізація CSS завантаження
+    optimizeCss: true,
+    // Краща оптимізація пакетів
+    optimizePackageImports: ['react-icons'],
+  },
+
+  // Оптимізація CSS та JS
+  compiler: {
+    // Видаляє console.log в production
+    removeConsole: process.env.NODE_ENV === "production",
   },
 
   // Зовнішні пакети для серверних компонентів (виправлено)
@@ -40,6 +50,24 @@ const nextConfig: NextConfig = {
   onDemandEntries: {
     maxInactiveAge: 25 * 1000,
     pagesBufferLength: 2,
+  },
+
+  // Покращення продуктивності
+  poweredByHeader: false,
+  compress: true,
+  
+  // Webpack оптимізації
+  webpack: (config, { dev, isServer }) => {
+    // Оптимізація для production
+    if (!dev && !isServer) {
+      config.optimization.splitChunks.cacheGroups.styles = {
+        name: 'styles',
+        test: /\.(css|scss)$/,
+        chunks: 'all',
+        enforce: true,
+      };
+    }
+    return config;
   },
 
   // CORS налаштування
@@ -89,6 +117,29 @@ const nextConfig: NextConfig = {
           {
             key: "X-DNS-Prefetch-Control",
             value: "on",
+          },
+        ],
+      },
+      // Оптимізовані cache headers для статичних ресурсів
+      {
+        source: "/_next/static/(.*)",
+        headers: [
+          {
+            key: "Cache-Control",
+            value: "public, max-age=31536000, immutable",
+          },
+        ],
+      },
+      {
+        source: "/_next/static/css/(.*)",
+        headers: [
+          {
+            key: "Cache-Control",
+            value: "public, max-age=31536000, immutable",
+          },
+          {
+            key: "Content-Type",
+            value: "text/css; charset=utf-8",
           },
         ],
       },

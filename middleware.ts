@@ -48,7 +48,6 @@ export async function middleware(request: NextRequest) {
             const cookieArray = Array.isArray(setCookieHeader)
               ? setCookieHeader
               : [setCookieHeader];
-            const responseHeaders = new Headers();
 
             for (const cookieStr of cookieArray) {
               const parsed = parse(cookieStr);
@@ -120,7 +119,7 @@ export const config = {
   matcher: [
     "/",
     "/about",
-    "/profile/:path*", 
+    "/profile/:path*",
     "/notes/:path*",
     "/sign-in",
     "/sign-up",

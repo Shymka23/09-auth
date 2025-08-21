@@ -5,7 +5,7 @@ import { useState } from "react";
 export default function TestPage() {
   const [result, setResult] = useState<{
     type: string;
-    data?: any;
+    data?: Record<string, unknown>;
     error?: string;
     status?: number;
   } | null>(null);

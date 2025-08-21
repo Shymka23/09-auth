@@ -6,7 +6,7 @@
 
 ```
 app/
-├── (auth-routes)/                    ✅ EXISTS
+├── (auth routes)/                    ✅ EXISTS
 │   ├── layout.tsx
 │   ├── sign-in/                      ✅ EXISTS
 │   │   ├── page.tsx
@@ -14,7 +14,7 @@ app/
 │   └── sign-up/                      ✅ EXISTS
 │       ├── page.tsx
 │       └── SignUp.module.css
-├── (private-routes)/                 ✅ EXISTS
+├── (private routes)/                 ✅ EXISTS
 │   ├── layout.tsx
 │   ├── @modal/                       ✅ EXISTS
 │   │   ├── default.tsx
@@ -101,27 +101,27 @@ app/
 
 All required directories and files exist in the repository:
 
-✅ **app/(auth-routes)/** - Authentication routes  
-✅ **app/(auth-routes)/sign-in/** - Sign in page  
-✅ **app/(auth-routes)/sign-up/** - Sign up page  
-✅ **app/(private-routes)/** - Protected routes  
-✅ **app/(private-routes)/notes/** - Notes management  
-✅ **app/(private-routes)/notes/[id]/** - Individual note view  
-✅ **app/(private-routes)/notes/action/create/** - Create note  
-✅ **app/(private-routes)/notes/filter/** - Notes filtering  
-✅ **app/(private-routes)/notes/filter/@sidebar/** - Sidebar component  
-✅ **app/(private-routes)/notes/filter/[...slug]/** - Dynamic filter routes  
-✅ **app/(private-routes)/profile/** - User profile  
-✅ **app/(private-routes)/profile/edit/** - Edit profile  
-✅ **app/@modal/** - Modal components (inside private-routes)  
-✅ **app/@modal/(.)notes/[id]/** - Note preview modal  
+✅ **app/(auth routes)/** - Authentication routes  
+✅ **app/(auth routes)/sign-in/** - Sign in page  
+✅ **app/(auth routes)/sign-up/** - Sign up page  
+✅ **app/(private routes)/** - Protected routes  
+✅ **app/(private routes)/notes/** - Notes management  
+✅ **app/(private routes)/notes/[id]/** - Individual note view  
+✅ **app/(private routes)/notes/action/create/** - Create note  
+✅ **app/(private routes)/notes/filter/** - Notes filtering  
+✅ **app/(private routes)/notes/filter/@sidebar/** - Sidebar component  
+✅ **app/(private routes)/notes/filter/[...slug]/** - Dynamic filter routes  
+✅ **app/(private routes)/profile/** - User profile  
+✅ **app/(private routes)/profile/edit/** - Edit profile  
+✅ **app/@modal/** - Modal components (inside private routes)  
+✅ **app/@modal/(.)notes/[id]/** - Note preview modal
 
 ## Build Status
 
 ✅ **Build successful** - All 19 pages generated correctly  
 ✅ **No TypeScript errors** - Clean compilation  
 ✅ **No ESLint warnings** - Code quality maintained  
-✅ **All routes functional** - Navigation works properly  
+✅ **All routes functional** - Navigation works properly
 
 ## File Naming Convention
 

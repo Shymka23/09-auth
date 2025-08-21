@@ -91,7 +91,7 @@ export function AvatarUpload({
         onAvatarChange(compressedFile);
       };
       reader.readAsDataURL(compressedFile);
-    } catch (error) {
+    } catch {
       setError("Помилка обробки зображення");
     }
   };

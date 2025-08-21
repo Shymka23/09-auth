@@ -3,7 +3,12 @@
 import { useState } from "react";
 
 export default function TestPage() {
-  const [result, setResult] = useState<any>(null);
+  const [result, setResult] = useState<{
+    type: string;
+    data?: any;
+    error?: string;
+    status?: number;
+  } | null>(null);
   const [loading, setLoading] = useState(false);
 
   const testHealthCheck = async () => {
@@ -13,7 +18,10 @@ export default function TestPage() {
       const data = await response.json();
       setResult({ type: "health", data, status: response.status });
     } catch (error) {
-      setResult({ type: "health", error: error instanceof Error ? error.message : "Unknown error" });
+      setResult({
+        type: "health",
+        error: error instanceof Error ? error.message : "Unknown error",
+      });
     }
     setLoading(false);
   };
@@ -25,7 +33,10 @@ export default function TestPage() {
       const data = await response.json();
       setResult({ type: "notes", data, status: response.status });
     } catch (error) {
-      setResult({ type: "notes", error: error instanceof Error ? error.message : "Unknown error" });
+      setResult({
+        type: "notes",
+        error: error instanceof Error ? error.message : "Unknown error",
+      });
     }
     setLoading(false);
   };
@@ -33,9 +44,13 @@ export default function TestPage() {
   return (
     <div style={{ padding: "20px", fontFamily: "monospace" }}>
       <h1>🔧 Vercel Deployment Test</h1>
-      
+
       <div style={{ marginBottom: "20px" }}>
-        <button onClick={testHealthCheck} disabled={loading} style={{ marginRight: "10px" }}>
+        <button
+          onClick={testHealthCheck}
+          disabled={loading}
+          style={{ marginRight: "10px" }}
+        >
           Test Health Check
         </button>
         <button onClick={testNotesAPI} disabled={loading}>
@@ -46,12 +61,14 @@ export default function TestPage() {
       {loading && <p>Loading...</p>}
 
       {result && (
-        <div style={{ 
-          backgroundColor: "#f5f5f5", 
-          padding: "15px", 
-          borderRadius: "5px",
-          marginTop: "20px"
-        }}>
+        <div
+          style={{
+            backgroundColor: "#f5f5f5",
+            padding: "15px",
+            borderRadius: "5px",
+            marginTop: "20px",
+          }}
+        >
           <h3>Result ({result.type}):</h3>
           <pre style={{ whiteSpace: "pre-wrap" }}>
             {JSON.stringify(result, null, 2)}
@@ -60,9 +77,16 @@ export default function TestPage() {
       )}
 
       <div style={{ marginTop: "30px", fontSize: "14px", color: "#666" }}>
-        <p><strong>Environment Info:</strong></p>
-        <p>URL: {typeof window !== "undefined" ? window.location.href : "SSR"}</p>
-        <p>User Agent: {typeof navigator !== "undefined" ? navigator.userAgent : "N/A"}</p>
+        <p>
+          <strong>Environment Info:</strong>
+        </p>
+        <p>
+          URL: {typeof window !== "undefined" ? window.location.href : "SSR"}
+        </p>
+        <p>
+          User Agent:{" "}
+          {typeof navigator !== "undefined" ? navigator.userAgent : "N/A"}
+        </p>
       </div>
     </div>
   );

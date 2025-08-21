@@ -57,9 +57,6 @@ export async function POST(request: NextRequest) {
     const mimeType = "image/jpeg"; // Завжди використовуємо JPEG для кращої компресії
     const imageUrl = `data:${mimeType};base64,${base64}`;
 
-    // Зберігаємо URL в cookie для цього користувача
-    const cookieStore = await cookies();
-
     // Якщо зображення менше 3500 символів, зберігаємо в cookie
     if (imageUrl.length <= 3500) {
       const response = NextResponse.json({

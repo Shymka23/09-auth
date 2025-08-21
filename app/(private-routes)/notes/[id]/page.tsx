@@ -87,7 +87,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
         canonical: url,
       },
     };
-  } catch (error) {
+  } catch {
     // Fallback metadata for error cases
     const fallbackTitle = "Note Details - NoteHub";
     const fallbackDescription = "View details of your note on NoteHub.";

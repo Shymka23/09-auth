@@ -9,7 +9,6 @@ import { AvatarUpload } from "@/components/AvatarUpload";
 import css from "./EditProfile.module.css";
 
 export default function EditProfilePage() {
-  const { t } = useLanguage();
   const [username, setUsername] = useState("");
   const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -24,7 +23,7 @@ export default function EditProfilePage() {
         setUser(currentUser);
         setUsername(currentUser.username || "");
         setAvatarUrl(currentUser.avatar || null);
-      } catch (error) {
+      } catch {
         router.push("/sign-in");
       }
     };
@@ -53,7 +52,7 @@ export default function EditProfilePage() {
 
       setUser(finalUser);
       router.push("/profile");
-    } catch (error) {
+    } catch {
       setError("Failed to update profile");
     } finally {
       setIsLoading(false);

@@ -64,3 +64,49 @@ export const uploadImage = async (file: File): Promise<string> => {
 
   return response.data.url;
 };
+
+// Notes API
+export const fetchNotes = async (search = "", page = 1, tag = "") => {
+  const params = new URLSearchParams();
+  if (search) params.append("search", search);
+  if (page) params.append("page", page.toString());
+  if (tag) params.append("tag", tag);
+  params.append("perPage", "12");
+
+  const { data } = await clientApi.get(`/notes?${params.toString()}`);
+  return data; // { notes, totalPages }
+};
+
+export const fetchNoteById = async (id: string) => {
+  const { data } = await clientApi.get(`/notes/${id}`);
+  return data;
+};
+
+export const createNote = async (note: {
+  title: string;
+  content: string;
+  tag: string;
+}) => {
+  const { data } = await clientApi.post("/notes", note);
+  return data;
+};
+
+export const deleteNote = async (id: string) => {
+  const { data } = await clientApi.delete(`/notes/${id}`);
+  return data;
+};
+
+export const getAllTags = async () => {
+  try {
+    const { data } = await clientApi.get("/notes");
+    const notes = data.notes || [];
+    const tags = new Set(
+      notes.map((note: { tag?: string }) => note.tag).filter(Boolean)
+    );
+    const tagsArray = Array.from(tags);
+    return ["All", ...tagsArray];
+  } catch (error: unknown) {
+    if (axios.isAxiosError(error) && error.response?.status === 401) return [];
+    throw error;
+  }
+};

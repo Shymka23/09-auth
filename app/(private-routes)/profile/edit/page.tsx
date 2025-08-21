@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { useLanguage } from "@/lib/context/LanguageContext";
 import { useAuthStore } from "@/lib/store/authStore";
 import { getCurrentUser, updateUser } from "@/lib/api/clientApi";
 import { AvatarUpload } from "@/components/AvatarUpload";

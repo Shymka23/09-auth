@@ -31,10 +31,10 @@ const nextConfig: NextConfig = {
   experimental: {
     // Дозволяє використовувати динамічні імпорти
     esmExternals: true,
-    // Оптимізація CSS завантаження
-    optimizeCss: true,
-    // Краща оптимізація пакетів
-    optimizePackageImports: ['react-icons'],
+    // Тимчасово відключаємо optimizeCss через prerender помилки
+    // optimizeCss: true,
+    // Краща оптимізація пакетів (тимчасово відключено)
+    // optimizePackageImports: ['react-icons'],
   },
 
   // Оптимізація CSS та JS

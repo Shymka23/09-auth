@@ -132,11 +132,6 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" data-scroll-behavior="smooth">
-      <head>
-        {/* DNS prefetch для критичних ресурсів */}
-        <link rel="dns-prefetch" href="//notehub-api.goit.study" />
-        <link rel="preconnect" href="https://notehub-api.goit.study" />
-      </head>
       <body
         className={`${roboto.variable} ${poppins.variable} ${inter.variable}`}
       >

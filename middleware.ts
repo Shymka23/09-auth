@@ -76,7 +76,10 @@ export async function middleware(request: NextRequest) {
           }
         }
       } catch (error) {
-        console.error("Session refresh failed:", error);
+        // В production логуємо менше деталей
+        if (process.env.NODE_ENV === "development") {
+          console.error("Session refresh failed:", error);
+        }
       }
     }
 

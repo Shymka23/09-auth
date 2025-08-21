@@ -64,24 +64,33 @@ export const getServerNotes = async (search = "", page = 1, tag = "") => {
   params.append("perPage", "12");
 
   try {
-    // Використовуємо локальний Route Handler замість прямого запиту до зовнішнього API
-    const response = await fetch(
-      `${process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"}/api/notes?${params.toString()}`,
-      {
-        headers: {
-          Cookie: cookieStore.toString(),
-        },
-      }
-    );
+    // Визначаємо базовий URL для різних середовищ
+    const baseUrl =
+      process.env.NODE_ENV === "production"
+        ? process.env.VERCEL_URL
+          ? `https://${process.env.VERCEL_URL}`
+          : "https://09-auth-mu.vercel.app"
+        : "http://localhost:3000";
+
+    const response = await fetch(`${baseUrl}/api/notes?${params.toString()}`, {
+      headers: {
+        Cookie: cookieStore.toString(),
+      },
+      // Додаємо таймаут для production
+      ...(process.env.NODE_ENV === "production" && {
+        next: { revalidate: 0 },
+      }),
+    });
 
     if (!response.ok) {
-      throw new Error(`Failed to fetch notes: ${response.status}`);
+      console.warn(`Notes fetch failed with status: ${response.status}`);
+      return { notes: [], totalPages: 0 };
     }
 
     return response.json();
   } catch (error) {
     // Якщо користувач не авторизований або інша помилка, повертаємо порожні дані
-    console.error("Server notes fetch error:", error);
+    console.warn("Server notes fetch error:", error);
     return { notes: [], totalPages: 0 };
   }
 };

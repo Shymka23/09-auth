@@ -26,7 +26,7 @@ export default function NotesClient({ initialData, tag }: NotesClientProps) {
   const [currentPage, setCurrentPage] = useState(1);
   const [query, setQuery] = useState("");
 
-  const { data, isError, isLoading, isSuccess, refetch } = useQuery({
+  const { data, isError, isLoading, isSuccess, refetch, error } = useQuery({
     queryKey: ["notes", query, currentPage, tag],
     queryFn: () => fetchNotes(query, currentPage, tag),
     placeholderData: keepPreviousData,
@@ -38,6 +38,8 @@ export default function NotesClient({ initialData, tag }: NotesClientProps) {
     refetchOnMount: false,
     // Якщо немає initialData, завантажуємо дані одразу
     enabled: true,
+    retry: 3, // Повторити запит 3 рази при помилці
+    retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 30000),
   });
 
   const totalPages = data?.totalPages ?? 0;

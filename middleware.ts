@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { parse } from "cookie";
 
-const privateRoutes = ["/profile", "/notes"];
-const publicRoutes = ["/sign-in", "/sign-up"];
+const privateRoutes = ["/profile", "/notes/filter", "/notes/action"];
+const publicRoutes = ["/sign-in", "/sign-up", "/", "/notes", "/about"];
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
@@ -107,16 +107,24 @@ export async function middleware(request: NextRequest) {
     }
   }
 
+  // For home page ("/"), allow access without authentication
+  if (pathname === "/") {
+    return NextResponse.next();
+  }
+
   // Default: allow access
   return NextResponse.next();
 }
 
 export const config = {
   matcher: [
-    "/profile/:path*",
+    "/",
+    "/about",
+    "/profile/:path*", 
     "/notes/:path*",
     "/sign-in",
     "/sign-up",
     "/api/upload",
+    "/test",
   ],
 };

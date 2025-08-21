@@ -2,7 +2,7 @@
 
 import { useId, useTransition } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { createNote } from "@/lib/api";
+import { createNote } from "@/lib/api/clientApi";
 import type { FormValues } from "@/types/note";
 import css from "./NoteForm.module.css";
 import toast from "react-hot-toast";

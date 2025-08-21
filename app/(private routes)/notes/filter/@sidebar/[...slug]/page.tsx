@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
-import { getAllTags } from "@/lib/api";
+import { getAllTags } from "@/lib/api/clientApi";
 import { useAuthStore } from "@/lib/store/authStore";
 import { useLanguage } from "@/lib/context/LanguageContext";
 import css from "./SidebarNotes.module.css";

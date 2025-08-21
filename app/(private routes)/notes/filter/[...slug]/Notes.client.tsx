@@ -14,7 +14,7 @@ import { ErrorMessage } from "@/components/ErrorMessage/ErrorMessage";
 import { ErrorMessageEmpty } from "@/components/ErrorMessageEmpty/ErrorMessageEmpty";
 import NoteList from "@/components/NoteList/NoteList";
 import Link from "next/link";
-import { fetchNotes } from "@/lib/api";
+import { fetchNotes } from "@/lib/api/clientApi";
 import { SearchBox } from "@/components/SearchBox/SearchBox";
 
 interface NotesClientProps {

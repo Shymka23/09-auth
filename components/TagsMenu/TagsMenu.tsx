@@ -3,14 +3,14 @@
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
-import { getAllTags } from "@/lib/api/clientApi";
+// Видаляємо getAllTags як не обов'язкову до специфікації функцію
 import { useAuthStore } from "@/lib/store/authStore";
 import { useLanguage } from "@/lib/context/LanguageContext";
 import css from "./TagsMenu.module.css";
 
 export default function TagsMenu() {
   const [isOpen, setIsOpen] = useState(false);
-  const [tags, setTags] = useState<string[]>([]);
+  const [tags] = useState<string[]>(["All", "Todo", "Personal", "Meeting", "Work", "Shopping"]);
   const [loading, setLoading] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
   const params = useParams();
@@ -38,24 +38,7 @@ export default function TagsMenu() {
   };
 
   useEffect(() => {
-    const fetchTags = async () => {
-      if (!isAuthenticated) {
-        setLoading(false);
-        return;
-      }
-
-      setLoading(true);
-      try {
-        const fetchedTags = await getAllTags();
-        setTags(fetchedTags as string[]);
-      } catch (error) {
-        console.error("Failed to fetch tags:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchTags();
+    setLoading(false);
   }, [isAuthenticated]);
 
   useEffect(() => {

@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
-import { getAllTags } from "@/lib/api/clientApi";
+// getAllTags прибрано згідно зі специфікацією
 import { useAuthStore } from "@/lib/store/authStore";
 import { useLanguage } from "@/lib/context/LanguageContext";
 import css from "./SidebarNotes.module.css";
@@ -11,7 +11,7 @@ import css from "./SidebarNotes.module.css";
 export default function SidebarNotes() {
   const params = useParams();
   const currentTag = params.slug?.[0] || "All";
-  const [tags, setTags] = useState<string[]>([]);
+  const [tags] = useState<string[]>(["All", "Todo", "Personal", "Meeting", "Work", "Shopping"]);
   const [loading, setLoading] = useState(false);
   const { isAuthenticated } = useAuthStore();
   const { t } = useLanguage();
@@ -36,24 +36,7 @@ export default function SidebarNotes() {
   };
 
   useEffect(() => {
-    const fetchTags = async () => {
-      if (!isAuthenticated) {
-        setLoading(false);
-        return;
-      }
-
-      setLoading(true);
-      try {
-        const fetchedTags = await getAllTags();
-        setTags(fetchedTags as string[]);
-      } catch (error) {
-        console.error("Failed to fetch tags:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchTags();
+    setLoading(false);
   }, [isAuthenticated]);
 
   if (loading) {

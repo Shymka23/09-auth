@@ -1,9 +1,5 @@
-import {
-  QueryClient,
-  HydrationBoundary,
-  dehydrate,
-} from "@tanstack/react-query";
-import { fetchNoteById } from "@/lib/api/clientApi";
+import { QueryClient, HydrationBoundary, dehydrate } from "@tanstack/react-query";
+import { getServerNoteById } from "@/lib/api/serverApi";
 import NoteDetailsClient from "./NoteDetails.client";
 import type { Metadata } from "next";
 
@@ -23,7 +19,7 @@ const NoteDetails = async ({ params }: Props) => {
   try {
     await queryClient.prefetchQuery({
       queryKey: ["note", id],
-      queryFn: () => fetchNoteById(id),
+      queryFn: () => getServerNoteById(id),
     });
   } catch {
     // Prefetch error will be handled by the client component
@@ -42,7 +38,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { id } = await params;
 
   try {
-    const note = await fetchNoteById(id);
+    const note = await getServerNoteById(id);
     const title = `Note: ${note.title}`;
     const description = note.content
       ? note.content.slice(0, 160).replace(/\s+/g, " ").trim()
@@ -70,10 +66,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
             type: "image/jpeg",
           },
         ],
-        publishedTime: note.createdAt,
-        modifiedTime: note.updatedAt,
+        // publishedTime and modifiedTime are optional; omit if not required by spec
         authors: ["NoteHub User"],
-        tags: note.tags || [],
+        tags: [note.tag],
       },
       twitter: {
         card: "summary_large_image",

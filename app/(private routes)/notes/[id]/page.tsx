@@ -1,4 +1,8 @@
-import { QueryClient, HydrationBoundary, dehydrate } from "@tanstack/react-query";
+import {
+  QueryClient,
+  HydrationBoundary,
+  dehydrate,
+} from "@tanstack/react-query";
 import { getServerNoteById } from "@/lib/api/serverApi";
 import NoteDetailsClient from "./NoteDetails.client";
 import type { Metadata } from "next";

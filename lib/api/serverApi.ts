@@ -1,18 +1,18 @@
 import { cookies } from "next/headers";
-import { api } from "@/lib/api/api";
 import { User } from "@/types/user";
 import { Note, NotesResponse } from "@/types/note";
 
-export const checkServerSession = async () => {
-  const cookieStore = await cookies();
-  const res = await api.get("/auth/session", {
-    headers: { Cookie: cookieStore.toString() },
+export const checkServerSession = async (cookieHeader: string | null) => {
+  const base = process.env.NEXT_PUBLIC_API_URL ?? "";
+  const res = await fetch(`${base}/api/auth/session`, {
+    headers: { Cookie: cookieHeader ?? "" },
   });
   return res;
 };
 
 export const getServerMe = async (): Promise<User> => {
   const cookieStore = await cookies();
+  const { api } = await import("@/lib/api/api");
   const { data } = await api.get("/users/me", {
     headers: { Cookie: cookieStore.toString() },
   });
@@ -24,6 +24,7 @@ export const updateServerUser = async (userData: {
   email?: string;
 }): Promise<User> => {
   const cookieStore = await cookies();
+  const { api } = await import("@/lib/api/api");
   const { data } = await api.patch("/users/me", userData, {
     headers: { Cookie: cookieStore.toString() },
   });
@@ -42,6 +43,7 @@ export const getServerNotes = async (
   if (tag && tag !== "All") params.append("tag", tag);
   params.append("perPage", "12");
 
+  const { api } = await import("@/lib/api/api");
   const { data } = await api.get(`/notes?${params.toString()}`, {
     headers: { Cookie: cookieStore.toString() },
   });
@@ -50,6 +52,7 @@ export const getServerNotes = async (
 
 export const getServerNoteById = async (id: string): Promise<Note> => {
   const cookieStore = await cookies();
+  const { api } = await import("@/lib/api/api");
   const { data } = await api.get(`/notes/${id}`, {
     headers: { Cookie: cookieStore.toString() },
   });

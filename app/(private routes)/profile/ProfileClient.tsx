@@ -137,32 +137,12 @@ export function ProfileClient({ user }: ProfileClientProps) {
             <div className={css.infoSection}>
               <h3>{t("profile.accountInfo")}</h3>
               <div className={css.infoItem}>
-                <span className={css.label}>
-                  {t("profile.registrationDate")}
-                </span>
-                <span className={css.value}>
-                  {user.createdAt
-                    ? new Date(user.createdAt).toLocaleDateString("en-US", {
-                        year: "numeric",
-                        month: "long",
-                        day: "numeric",
-                      })
-                    : "N/A"}
-                </span>
+                <span className={css.label}>{t("profile.registrationDate")}</span>
+                <span className={css.value}>—</span>
               </div>
               <div className={css.infoItem}>
                 <span className={css.label}>{t("profile.lastUpdated")}</span>
-                <span className={css.value}>
-                  {user.updatedAt
-                    ? new Date(user.updatedAt).toLocaleDateString("en-US", {
-                        year: "numeric",
-                        month: "long",
-                        day: "numeric",
-                        hour: "2-digit",
-                        minute: "2-digit",
-                      })
-                    : "N/A"}
-                </span>
+                <span className={css.value}>—</span>
               </div>
             </div>
           </div>

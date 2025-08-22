@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { cookies } from "next/headers";
-import { checkServerSession } from "@/lib/api/serverApi";
+import { checkSessionEdge } from "@/lib/edge/checkSession";
 
 const privateRoutes = ["/profile", "/notes"];
 const authRoutes = ["/sign-in", "/sign-up"];
@@ -17,7 +17,7 @@ export async function middleware(request: NextRequest) {
 
   if (!accessToken && refreshToken) {
     try {
-      await checkServerSession(request.headers.get("cookie"));
+      await checkSessionEdge(request.headers.get("cookie"));
     } catch {}
   }
 

@@ -17,7 +17,7 @@ export async function middleware(request: NextRequest) {
 
   if (!accessToken && refreshToken) {
     try {
-      await checkServerSession();
+      await checkServerSession(request.headers.get("cookie"));
     } catch {}
   }
 

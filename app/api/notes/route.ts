@@ -9,14 +9,20 @@ export async function GET(request: NextRequest) {
     const cookieStore = await cookies();
     const search = request.nextUrl.searchParams.get("search") ?? "";
     const page = Number(request.nextUrl.searchParams.get("page") ?? 1);
-    const tag = request.nextUrl.searchParams.get("tag") ?? "";
+    let tag = request.nextUrl.searchParams.get("tag") ?? "";
 
-    const res = await api.get("/notes", {
+    // Normalize tag to empty string if "All"
+    if (tag === "All") {
+      tag = "";
+    }
+
+    const res = await api("/notes", {
+      method: "GET",
       params: {
         ...(search !== "" && { search }),
         page,
         perPage: 12,
-        ...(tag && { tag }),
+        ...(tag !== "" && { tag }),
       },
       headers: {
         Cookie: cookieStore.toString(),
@@ -58,7 +64,7 @@ export async function POST(request: NextRequest) {
       logErrorResponse(error.response?.data);
       return NextResponse.json(
         { error: error.message, response: error.response?.data },
-        { status: error.status }
+        { status: error.response?.status || 500 }
       );
     }
     logErrorResponse({ message: (error as Error).message });

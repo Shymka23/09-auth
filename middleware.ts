@@ -15,9 +15,21 @@ export async function middleware(request: NextRequest) {
   const isPrivate = privateRoutes.some((route) => pathname.startsWith(route));
   const isAuth = authRoutes.some((route) => pathname.startsWith(route));
 
+  const response = NextResponse.next();
+
   if (!accessToken && refreshToken) {
     try {
-      await checkSessionEdge(request.headers.get("cookie"));
+      const sessionResponse = await checkSessionEdge(
+        request.headers.get("cookie")
+      );
+
+      if (sessionResponse.ok) {
+        // If session refresh was successful, get new cookies from the response
+        const setCookieHeader = sessionResponse.headers.get("set-cookie");
+        if (setCookieHeader) {
+          response.headers.set("set-cookie", setCookieHeader);
+        }
+      }
     } catch {}
   }
 
@@ -28,10 +40,10 @@ export async function middleware(request: NextRequest) {
   }
 
   if (isAuth && hasAccess) {
-    return NextResponse.redirect(new URL("/profile", request.url));
+    return NextResponse.redirect(new URL("/", request.url));
   }
 
-  return NextResponse.next();
+  return response;
 }
 
 export const config = {

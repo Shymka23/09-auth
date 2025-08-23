@@ -2,10 +2,11 @@ import { cookies } from "next/headers";
 import { User } from "@/types/user";
 import { Note, NotesResponse } from "@/types/note";
 
-export const checkServerSession = async (cookieHeader: string | null) => {
-  const base = process.env.NEXT_PUBLIC_API_URL ?? "";
-  const res = await fetch(`${base}/api/auth/session`, {
-    headers: { Cookie: cookieHeader ?? "" },
+export const checkServerSession = async () => {
+  const cookieStore = await cookies();
+  const { api } = await import("@/lib/api/api");
+  const res = await api.get("/auth/session", {
+    headers: { Cookie: cookieStore.toString() },
   });
   return res;
 };

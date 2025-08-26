@@ -1,11 +1,22 @@
 import { cookies } from "next/headers";
 import { User } from "@/types/user";
 import { Note, NotesResponse } from "@/types/note";
+import axios from "axios";
+
+// Серверний API інстанс для звернення до зовнішнього API
+const createServerApi = () => {
+  return axios.create({
+    baseURL:
+      process.env.NEXT_PUBLIC_API_URL ?? "https://notehub-api.goit.study",
+    withCredentials: true,
+    headers: { "Content-Type": "application/json" },
+  });
+};
 
 export const checkServerSession = async () => {
   const cookieStore = await cookies();
-  const { api } = await import("@/lib/api/api");
-  const res = await api.get("/auth/session", {
+  const serverApi = createServerApi();
+  const res = await serverApi.get("/auth/session", {
     headers: { Cookie: cookieStore.toString() },
   });
   return res;
@@ -13,8 +24,8 @@ export const checkServerSession = async () => {
 
 export const getServerMe = async (): Promise<User> => {
   const cookieStore = await cookies();
-  const { api } = await import("@/lib/api/api");
-  const { data } = await api.get("/users/me", {
+  const serverApi = createServerApi();
+  const { data } = await serverApi.get("/users/me", {
     headers: { Cookie: cookieStore.toString() },
   });
   return data as User;
@@ -25,8 +36,8 @@ export const updateServerUser = async (userData: {
   email?: string;
 }): Promise<User> => {
   const cookieStore = await cookies();
-  const { api } = await import("@/lib/api/api");
-  const { data } = await api.patch("/users/me", userData, {
+  const serverApi = createServerApi();
+  const { data } = await serverApi.patch("/users/me", userData, {
     headers: { Cookie: cookieStore.toString() },
   });
   return data as User;
@@ -44,8 +55,8 @@ export const getServerNotes = async (
   if (tag && tag !== "All") params.append("tag", tag);
   params.append("perPage", "12");
 
-  const { api } = await import("@/lib/api/api");
-  const { data } = await api.get(`/notes?${params.toString()}`, {
+  const serverApi = createServerApi();
+  const { data } = await serverApi.get(`/notes?${params.toString()}`, {
     headers: { Cookie: cookieStore.toString() },
   });
   return data as NotesResponse;
@@ -53,8 +64,8 @@ export const getServerNotes = async (
 
 export const getServerNoteById = async (id: string): Promise<Note> => {
   const cookieStore = await cookies();
-  const { api } = await import("@/lib/api/api");
-  const { data } = await api.get(`/notes/${id}`, {
+  const serverApi = createServerApi();
+  const { data } = await serverApi.get(`/notes/${id}`, {
     headers: { Cookie: cookieStore.toString() },
   });
   return data as Note;

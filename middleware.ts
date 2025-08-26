@@ -17,7 +17,16 @@ export async function middleware(request: NextRequest) {
 
   if (!accessToken && refreshToken) {
     try {
-      await checkSessionEdge(request.headers.get("cookie"));
+      const sessionResponse = await checkSessionEdge(
+        request.headers.get("cookie")
+      );
+      const setCookieHeaders = sessionResponse.headers.get("set-cookie");
+
+      if (setCookieHeaders && sessionResponse.ok) {
+        const response = NextResponse.next();
+        response.headers.set("set-cookie", setCookieHeaders);
+        return response;
+      }
     } catch {}
   }
 
@@ -28,7 +37,7 @@ export async function middleware(request: NextRequest) {
   }
 
   if (isAuth && hasAccess) {
-    return NextResponse.redirect(new URL("/profile", request.url));
+    return NextResponse.redirect(new URL("/", request.url));
   }
 
   return NextResponse.next();
